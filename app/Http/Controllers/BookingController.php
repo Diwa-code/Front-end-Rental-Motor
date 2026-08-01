@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Carbon\Carbon;
 
+// 1. TAMBAHKAN DUA BARIS INI UNTUK MEMANGGIL MIDTRANS
+use Midtrans\Config;
+use Midtrans\Snap;
+
 class BookingController extends Controller
 {
     /**
@@ -24,7 +28,6 @@ class BookingController extends Controller
         
         // Kondisi Gagal: Jika data belum ada, atau ada kolom penting yang kosong
         if (!$customer || empty($customer->no_telp) || empty($customer->alamat) || empty($customer->foto_ktp)) {
-            // Flash message optional
             session()->flash('error', 'Silakan lengkapi identitas Anda terlebih dahulu sebelum menyewa motor.');
             return redirect()->route('identitas.create');
         }
@@ -35,17 +38,16 @@ class BookingController extends Controller
         // Pastikan motor masih tersedia
         if ($motor->status !== 'tersedia') {
             session()->flash('error', 'Mohon maaf, motor ini tidak tersedia untuk disewa saat ini.');
-            return redirect()->route('dashboard'); // Atau redirect kembali ke '/'
+            return redirect()->route('dashboard'); 
         }
 
-        // Kondisi Lolos: Lanjut ke Fase 3 (Checkout Form)
         return Inertia::render('Booking/Create', [
             'motor' => $motor
         ]);
     }
 
     /**
-     * Fase 4: Pemrosesan Data
+     * Fase 4: Pemrosesan Data & Generate Tagihan Midtrans
      */
     public function store(Request $request, $id_motor)
     {
@@ -72,14 +74,14 @@ class BookingController extends Controller
             return back()->withErrors(['durasi_hari' => 'Total durasi sewa harus minimal 1 hari.']);
         }
 
-        // Tentukan persentase diskon berdasarkan durasi aktual
+        // Tentukan persentase diskon
         $diskonPersen = 0;
         if ($durasi >= 180) {
-            $diskonPersen = 20; // 20% diskon maksimal (kelipatan 6 bulan)
+            $diskonPersen = 20; 
         } elseif ($durasi >= 90) {
-            $diskonPersen = 15; // 15% diskon untuk 3 bulan
+            $diskonPersen = 15; 
         } elseif ($durasi >= 30) {
-            $diskonPersen = 10; // 10% diskon untuk 1 bulan
+            $diskonPersen = 10; 
         }
 
         $hargaKotor = $durasi * $motor->harga;
@@ -87,10 +89,9 @@ class BookingController extends Controller
         $totalBayar = $hargaKotor - $potongan;
 
         $tglSewa = Carbon::parse($request->tanggal_sewa);
-        // Jika durasi 1 hari, maka tgl kembali = tgl sewa.
         $tglKembali = $tglSewa->copy()->addDays($durasi - 1); 
 
-        // Simpan ke tb_transaksi
+        // 1. Simpan Transaksi Pertama Kali (Untuk mendapatkan ID Transaksi)
         $transaksi = new tb_transaksi();
         $transaksi->customer_id = $customer->id_customer;
         $transaksi->motor_id = $motor->id_motor;
@@ -101,6 +102,47 @@ class BookingController extends Controller
         $transaksi->total_bayar = $totalBayar;
         $transaksi->status_transaksi = 'menunggu_pembayaran';
         $transaksi->save();
+
+        // 2. SETTING KONFIGURASI MIDTRANS
+        Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+        Config::$isProduction = env('MIDTRANS_IS_PRODUCTION', false);
+        Config::$isSanitized = true;
+        Config::$is3ds = true;
+
+        // 3. SIAPKAN DATA TAGIHAN YANG AKAN DIKIRIM KE MIDTRANS
+        $params = [
+            'transaction_details' => [
+                'order_id' => 'TRX-' . $transaksi->id_transaksi, // Format tagihan, misal: TRX-5
+                'gross_amount' => (int) $totalBayar, // Nominal harus angka bulat
+            ],
+            'customer_details' => [
+                'first_name' => $customer->nama, // Asumsi ada kolom 'nama' di tb_customer
+                'email' => $user->email,
+                'phone' => $customer->no_telp,
+            ],
+            'item_details' => [
+                [
+                    'id' => $motor->id_motor,
+                    'price' => (int) $totalBayar,
+                    'quantity' => 1,
+                    'name' => 'Sewa ' . $motor->nama_motor
+                ]
+            ]
+        ];
+
+        // 4. MINTA SNAP TOKEN KE SERVER MIDTRANS
+        try {
+            $snapToken = Snap::getSnapToken($params);
+            
+            // Simpan token ke database
+            $transaksi->snap_token = $snapToken;
+            $transaksi->save();
+
+        } catch (\Exception $e) {
+            // Jika Midtrans error, kembalikan status motor dan batalkan
+            $transaksi->delete(); 
+            return back()->withErrors(['message' => 'Gagal menghubungi server pembayaran: ' . $e->getMessage()]);
+        }
 
         // Kunci inventaris
         $motor->status = 'disewa';

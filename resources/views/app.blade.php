@@ -11,6 +11,12 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
+         <!-- Tambahkan baris ini tepat sebelum </head> -->
+        <script type="text/javascript"
+                src="https://app.sandbox.midtrans.com/snap/snap.js"
+                data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}">
+        </script>
+        
         @routes
         @viteReactRefresh
         @vite(['resources/js/app.jsx', "resources/js/Pages/{$page['component']}.jsx"])

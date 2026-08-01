@@ -30,6 +30,7 @@ Route::middleware(['auth'])->group(function () {
     
     // Rute Dashboard Utama
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/api/transaksi/{id_transaksi}', [DashboardController::class, 'showTransaksi'])->name('transaksi.show');
     
     // Rute untuk Form Identitas
     Route::get('/identitas/create', [CustomerController::class, 'create'])->name('identitas.create');
