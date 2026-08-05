@@ -42,7 +42,7 @@ export function OurMission() {
 
                     {/* Kanan: Gambar Nmax */}
                     <div className="relative order-1 lg:order-2">
-                        <img src="https://images.unsplash.com/photo-1599818815197-f584f74d0e65?q=80&w=800&auto=format&fit=crop" alt="Scooter at Bali Temple" className="w-full rounded-[2.5rem] shadow-2xl object-cover aspect-[4/5]" />
+                        <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5NBYTxtzg0MgWU6IOa2b5jJwZo7pKKw1Mtq6UGBpmDI4PcIp7cG-QGEBpW8qi1U2l7Yn-e1V-IJ3CkiMRDg1seZCZhGgOYO3TnfGHkk1m3UMQv321ky6fwvsFH-3sgHM17Dw7Quq90e8-iYXImJGcT-gyMWJdeVIBvx4xK2fxI8J-yRsWhxkaeGtG1kk_EULdTzrLS_-RX8y223hCjkadMki9d-qH-Na-FE1zXzL0igiiUxitWo1lpQ?q=80&w=800&auto=format&fit=crop" alt="Scooter at Bali Temple" className="w-full rounded-[2.5rem] shadow-2xl object-cover aspect-[4/5]" />
                         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-11/12 max-w-sm bg-white/90 backdrop-blur-md rounded-2xl py-4 px-6 shadow-xl flex items-center justify-center gap-3">
                             <div className="flex text-[#138282] text-lg">★★★★★</div>
                             <span className="text-sm font-bold text-gray-800">5.0 Customer Rating</span>

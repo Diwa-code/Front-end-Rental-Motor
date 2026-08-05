@@ -11,7 +11,7 @@ export function OurStory() {
                     <div className="grid grid-cols-2 gap-4 sm:gap-6 items-start">
                         <div className="flex flex-col gap-4 sm:gap-6">
                             <div className="bg-white rounded-3xl shadow-sm overflow-hidden aspect-[3/4] relative border border-white/50">
-                                <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=600&auto=format&fit=crop" alt="Bali Scenery" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+                                <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=600&auto=format&fit=crophttps://lh3.googleusercontent.com/aida-public/AB6AXuDc9_pMnJVb5pok4P0rlcRRDMPof1jmhL-QkUJRn6bcuUc9sj6RIJ_GiDCEhx802rNEozKNf1K1Njl8ZDaDmtLz30G25IywgZ9nEc1OI5I1aJRAa9rtFTn_myVmDMDmWF_p9BMyE7cj3qJgzSQLp9EB3DLxGaHTj_oj4uqbOp9VO6PwCpLUkFZagERpxoj6-CUarBksiWVHNBaUWxc966YUPz_b0U1i4IXgbYmOoaxza-GSFoucB9GcLw" alt="Bali Scenery" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
                             </div>
                             <div className="bg-white rounded-3xl shadow-sm overflow-hidden aspect-square relative border border-white/50">
                                 <img src="https://images.unsplash.com/photo-1555400038-63f5ba517a47?q=80&w=600&auto=format&fit=crop" alt="Tropical Road" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
@@ -19,7 +19,7 @@ export function OurStory() {
                         </div>
                         <div className="flex flex-col gap-4 sm:gap-6 mt-12 sm:mt-16">
                             <div className="bg-white rounded-3xl shadow-sm overflow-hidden aspect-square relative border border-white/50">
-                                <img src="https://images.unsplash.com/photo-1571869422204-762299849ce3?q=80&w=600&auto=format&fit=crop" alt="Riding in Bali" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+                                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDc9_pMnJVb5pok4P0rlcRRDMPof1jmhL-QkUJRn6bcuUc9sj6RIJ_GiDCEhx802rNEozKNf1K1Njl8ZDaDmtLz30G25IywgZ9nEc1OI5I1aJRAa9rtFTn_myVmDMDmWF_p9BMyE7cj3qJgzSQLp9EB3DLxGaHTj_oj4uqbOp9VO6PwCpLUkFZagERpxoj6-CUarBksiWVHNBaUWxc966YUPz_b0U1i4IXgbYmOoaxza-GSFoucB9GcLw" alt="Riding in Bali" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
                             </div>
                             <div className="bg-white rounded-3xl shadow-sm overflow-hidden aspect-[3/4] relative border border-white/50">
                                 <img src="https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?q=80&w=600&auto=format&fit=crop" alt="Coastline View" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
